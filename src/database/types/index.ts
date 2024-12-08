@@ -1,4 +1,9 @@
-import { RowDataPacket } from "mysql2";
+export interface AccountRow {
+  accountId: number;
+  accountName: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export interface TransactionRow {
   transactionId: number;
@@ -8,13 +13,6 @@ export interface TransactionRow {
   accountId?: number;
   description: string;
   transactionTypeId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface AccountRow {
-  accountId: number;
-  accountName: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

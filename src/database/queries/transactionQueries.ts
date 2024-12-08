@@ -4,14 +4,14 @@ import { TransactionRow } from "../types";
 
 const pool = createPool();
 
-export const insert = async (transactionValues: unknown[]) => {
+export async function insert(transactionValues: unknown[]) {
   await pool.query(
     "INSERT INTO transactions (Amount, Date, Description, Name) VALUES (?, ?, ?);",
     transactionValues
   );
-};
+}
 
-export const selectAll = async (): Promise<TransactionRow[]> => {
+export async function selectAll(): Promise<TransactionRow[]> {
   const [rows] = await pool.query<RowDataPacket[]>(
     "SELECT * FROM transactions;"
   );
@@ -29,4 +29,4 @@ export const selectAll = async (): Promise<TransactionRow[]> => {
       updatedAt: rowValues[8],
     };
   });
-};
+}

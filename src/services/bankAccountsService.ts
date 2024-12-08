@@ -1,13 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { BankAccount, ApiError, ErrorCode, CreateBankAccountRequest } from "./types";
+import {
+  BankAccount,
+  ApiError,
+  ErrorCode,
+  CreateBankAccountRequest,
+} from "./types";
 import { validateCreateBankAccount } from "./validators/bankAccounts";
 import { insert, selectAll } from "../database/queries/accountQueries";
 
-export const create = async (
-  request: Request<{}, {}, CreateBankAccountRequest>,
+export async function create(
+  request: Request<object, object, CreateBankAccountRequest>,
   response: Response,
   next: NextFunction
-) => {
+) {
   try {
     const data = request.body;
 
@@ -18,9 +23,9 @@ export const create = async (
   } catch (error: unknown) {
     next(handleError(error));
   }
-};
+}
 
-export const getAll = async (_: Request, res: Response, next: NextFunction) => {
+export async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
     const accountsRows = await selectAll();
     const transactions = accountsRows.map<BankAccount>((tr) => ({
@@ -32,7 +37,7 @@ export const getAll = async (_: Request, res: Response, next: NextFunction) => {
   } catch (error: unknown) {
     next(handleError(error));
   }
-};
+}
 
 function handleError(error: unknown): ApiError {
   if (error instanceof Error) {

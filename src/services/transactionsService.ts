@@ -26,7 +26,7 @@ export async function getAll(_: Request, res: Response, next: NextFunction) {
 }
 
 export async function create(
-  request: Request<{}, {}, CreateTransactionRequest>,
+  request: Request<object, object, CreateTransactionRequest>,
   res: Response,
   next: NextFunction
 ) {

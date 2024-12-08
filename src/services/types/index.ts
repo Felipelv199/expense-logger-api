@@ -22,11 +22,11 @@ export interface ApiError {
   message: string;
 }
 
-export interface CreateAccountRequest {
+export interface CreateBankAccountRequest {
   name: string;
 }
 
-export interface Account {
+export interface BankAccount {
   id: number;
   name: string;
 }

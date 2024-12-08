@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { Account, ApiError, ErrorCode, Transaction } from "./types";
+import { BankAccount, ApiError, ErrorCode, CreateBankAccountRequest } from "./types";
 import { validateCreateBankAccount } from "./validators/bankAccounts";
 import { insert, selectAll } from "../database/queries/accountQueries";
 
 export const create = async (
-  request: Request<{}, Account>,
+  request: Request<{}, {}, CreateBankAccountRequest>,
   response: Response,
   next: NextFunction
 ) => {
@@ -23,7 +23,7 @@ export const create = async (
 export const getAll = async (_: Request, res: Response, next: NextFunction) => {
   try {
     const accountsRows = await selectAll();
-    const transactions = accountsRows.map<Account>((tr) => ({
+    const transactions = accountsRows.map<BankAccount>((tr) => ({
       id: tr.accountId,
       name: tr.accountName,
     }));

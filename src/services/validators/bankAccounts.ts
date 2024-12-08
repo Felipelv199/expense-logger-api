@@ -1,6 +1,6 @@
-import { CreateAccountRequest } from "../types";
+import { CreateBankAccountRequest } from "../types";
 
-export function validateCreateBankAccount (createAccountRequest: CreateAccountRequest) {
+export function validateCreateBankAccount (createAccountRequest: CreateBankAccountRequest) {
     const { name } = createAccountRequest;
 
     if (!name) {

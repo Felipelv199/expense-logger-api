@@ -3,7 +3,7 @@ import { CreateTransactionRequest } from "../types";
 export function validateCreateTransactionRequest(
   createTransactionRequest: CreateTransactionRequest
 ) {
-  const {amount, date, description, name} = createTransactionRequest;
+  const { amount, date, description, name } = createTransactionRequest;
 
   if (!amount) {
     throw new Error(`Missing required fields with name 'amount'.`);

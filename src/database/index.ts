@@ -16,7 +16,7 @@ function _buildPoolOptions(
   };
 }
 
-function createPool() {
+function buildPool() {
   const configuration = buildDatabaseConfiguration();
   const poolOptions = _buildPoolOptions(configuration);
   return mysql.createPool(poolOptions);
@@ -29,4 +29,4 @@ async function testConnnection(dabaseConfiguration: DatabaseConfiguration) {
   console.log(tables);
 }
 
-export { createPool, testConnnection };
+export { buildPool as createPool, testConnnection };

@@ -21,3 +21,12 @@ export interface ApiError {
   code: ErrorCode;
   message: string;
 }
+
+export interface CreateBankAccountRequest {
+  name: string;
+}
+
+export interface BankAccount {
+  id: number;
+  name: string;
+}

@@ -1,17 +1,17 @@
-import { on } from "events";
 import { createPool } from "..";
 import { AccountRow } from "../types";
 import { RowDataPacket } from "mysql2";
 
 const pool = createPool();
 
-export const insert = async (accountValues: unknown[]) =>
+export async function insert(accountValues: unknown[]) {
   await pool.query(
     "INSERT INTO accounts (AccountName) VALUES (?)",
     accountValues
   );
+}
 
-export const selectAll = async (): Promise<AccountRow[]> => {
+export async function selectAll(): Promise<AccountRow[]> {
   const [rows] = await pool.query<RowDataPacket[]>("SELECT * FROM accounts");
 
   return rows.map<AccountRow>((r) => {
@@ -24,4 +24,4 @@ export const selectAll = async (): Promise<AccountRow[]> => {
       updatedAt: rowValues[3],
     };
   });
-};
+}

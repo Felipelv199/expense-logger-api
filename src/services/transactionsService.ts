@@ -3,7 +3,8 @@ import { insert, selectAll } from "../database/queries/transactionQueries";
 import {
   ApiError,
   CreateTransactionRequest,
-  ErrorMessage,
+  ErrorStatusCode,
+  ErrorStatusName,
   Transaction,
 } from "./types";
 import { validateCreateTransactionRequest } from "./validators/transactionsValidator";
@@ -42,15 +43,12 @@ export async function create(
   }
 }
 
-function handleError(error: unknown): ApiError {
-  if (error instanceof Error) {
-    return {
-      code: ErrorMessage.GENERAL_ERROR,
-      message: error.message,
-    };
-  }
+function handleError(err: unknown): ApiError {
+  const error = err instanceof Error ? err : new Error("Unexpected error occured.");
+
   return {
-    code: ErrorMessage.GENERAL_ERROR,
-    message: "Unexpected error occured.",
+    status: ErrorStatusCode.GENERAL_ERROR,
+    code: ErrorStatusName.GENERAL_ERROR,
+    message: error.message,
   };
 }

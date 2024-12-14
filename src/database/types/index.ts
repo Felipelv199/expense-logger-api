@@ -5,6 +5,13 @@ export interface AccountRow {
   updatedAt?: Date;
 }
 
+export interface CategoryRow {
+  categoryId: number;
+  budgetId: number;
+  name: string;
+  amount: string;
+}
+
 export interface TransactionRow {
   transactionId: number;
   name: string;

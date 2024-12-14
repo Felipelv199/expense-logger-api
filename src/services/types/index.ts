@@ -13,12 +13,24 @@ export interface Transaction {
   id: number;
 }
 
-export enum ErrorCode {
+export enum ErrorMessage {
+  GENERAL_ERROR = "General error",
+  BUDGET_NOT_FOUND = "Budget not found",
+}
+
+export enum ErrorStatusName {
   GENERAL_ERROR = "GENERAL_ERROR",
+  NOT_ACCEPTABLE = "NOT_ACCEPTABLE",
+}
+
+export enum ErrorStatusCode {
+  GENERAL_ERROR = 500,
+  NOT_ACCEPTABLE = 406,
 }
 
 export interface ApiError {
-  code: ErrorCode;
+  status: ErrorStatusCode;
+  code: ErrorStatusName;
   message: string;
 }
 
@@ -28,5 +40,17 @@ export interface CreateBankAccountRequest {
 
 export interface BankAccount {
   id: number;
+  name: string;
+}
+
+export interface CreateCategoryRequest {
+  amount?: string;
+  budgetId?: number;
+  name: string;
+}
+
+export interface Category {
+  id: number;
+  amount: string;
   name: string;
 }

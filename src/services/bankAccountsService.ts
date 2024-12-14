@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import {
   BankAccount,
   ApiError,
-  ErrorCode,
   CreateBankAccountRequest,
+  ErrorStatusCode,
+  ErrorStatusName,
 } from "./types";
-import { validateCreateBankAccount } from "./validators/bankAccounts";
+import { validateCreateBankAccount } from "./validators/bankAccountsValidator";
 import { insert, selectAll } from "../database/queries/accountQueries";
 
 export async function create(
@@ -39,15 +40,12 @@ export async function getAll(_: Request, res: Response, next: NextFunction) {
   }
 }
 
-function handleError(error: unknown): ApiError {
-  if (error instanceof Error) {
-    return {
-      code: ErrorCode.GENERAL_ERROR,
-      message: error.message,
-    };
-  }
+function handleError(err: unknown): ApiError {
+  const error = err instanceof Error ? err : new Error("Unexpected error occured.");
+
   return {
-    code: ErrorCode.GENERAL_ERROR,
-    message: "Unexpected error occured.",
+    status: ErrorStatusCode.GENERAL_ERROR,
+    code: ErrorStatusName.GENERAL_ERROR,
+    message: error.message,
   };
 }

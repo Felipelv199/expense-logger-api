@@ -3,10 +3,10 @@ import { insert, selectAll } from "../database/queries/transactionQueries";
 import {
   ApiError,
   CreateTransactionRequest,
-  ErrorCode,
+  ErrorMessage,
   Transaction,
 } from "./types";
-import { validateCreateTransactionRequest } from "./validators/transactionsValidators";
+import { validateCreateTransactionRequest } from "./validators/transactionsValidator";
 
 export async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
@@ -45,12 +45,12 @@ export async function create(
 function handleError(error: unknown): ApiError {
   if (error instanceof Error) {
     return {
-      code: ErrorCode.GENERAL_ERROR,
+      code: ErrorMessage.GENERAL_ERROR,
       message: error.message,
     };
   }
   return {
-    code: ErrorCode.GENERAL_ERROR,
+    code: ErrorMessage.GENERAL_ERROR,
     message: "Unexpected error occured.",
   };
 }

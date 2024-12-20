@@ -15,7 +15,7 @@ export async function selectAll(): Promise<TransactionRow[]> {
   const [rows] = await pool.query<RowDataPacket[]>(
     "SELECT * FROM transactions;"
   );
-  return rows.map((r) => {
+  return rows.map<TransactionRow>((r) => {
     const rowValues = Object.values(r);
     return {
       transactionId: rowValues[0],
@@ -27,6 +27,7 @@ export async function selectAll(): Promise<TransactionRow[]> {
       transactionTypeId: rowValues[6],
       createdAt: rowValues[7],
       updatedAt: rowValues[8],
+      categoryId: rowValues[9],
     };
   });
 }

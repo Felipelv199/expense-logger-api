@@ -8,8 +8,9 @@ import {
   ErrorStatusName,
 } from "./types";
 import { validateCreateCategoryRequest } from "./validators/categoriesValidator";
-import { insert, selectAll } from "../database/queries/categoriesQueries";
+import { findByName, insert, selectAll } from "../database/queries/categoriesQueries";
 import { findByBudgetId } from "../database/queries/budgetQueries";
+import { mapCategoryRowToCategory, mapCreateCategoryToCategoryRow } from "../mappers/categoriesMapper";
 
 export async function create(
   req: Request<object, object, CreateCategoryRequest>,
@@ -28,7 +29,13 @@ export async function create(
     if (budgetId && rows.length === 0)
       throw new Error(ErrorMessage.BUDGET_NOT_FOUND);
 
-    await insert(Object.values(body));
+    if (body.name) {
+      const category = await findByName(body.name);
+
+      if (category) throw new Error(ErrorMessage.CATEGORY_ALREADY_EXISTS);
+    }
+
+    await insert(mapCreateCategoryToCategoryRow(body));
 
     res.status(201).send();
   } catch (error: unknown) {
@@ -39,25 +46,29 @@ export async function create(
 export async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
     const rows = await selectAll();
-    const category = rows.map<Category>((tr) => ({
-      amount: tr.amount,
-      name: tr.name,
-      id: tr.categoryId,
-    }));
-
-    res.send(category);
+    const categories = rows.map<Category>((row) => mapCategoryRowToCategory(row));
+    res.send(categories);
   } catch (error: unknown) {
     next(handleError(error));
   }
 }
 
 function handleError(err: unknown): ApiError {
-  const error = err instanceof Error ? err : new Error("Unexpected error occured.");
+  const error =
+    err instanceof Error ? err : new Error("Unexpected error occured.");
 
   if (error.message === ErrorMessage.BUDGET_NOT_FOUND) {
     return {
       status: ErrorStatusCode.NOT_ACCEPTABLE,
       code: ErrorStatusName.NOT_ACCEPTABLE,
+      message: error.message,
+    };
+  }
+
+  if (error.message === ErrorMessage.CATEGORY_ALREADY_EXISTS) {
+    return {
+      status: ErrorStatusCode.CONFLICT,
+      code: ErrorStatusName.CONFLICT,
       message: error.message,
     };
   }

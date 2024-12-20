@@ -1,15 +1,15 @@
 export interface AccountRow {
   accountId: number;
   accountName: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 export interface CategoryRow {
-  categoryId: number;
-  budgetId: number;
+  categoryId?: number | null;
+  budgetId: number | null;
   name: string;
-  amount: string;
+  amount: string | null;
 }
 
 export interface TransactionRow {
@@ -17,9 +17,10 @@ export interface TransactionRow {
   name: string;
   date: Date;
   amount: number;
-  accountId?: number;
+  accountId: number | null;
   description: string;
-  transactionTypeId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  transactionTypeId: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+  categoryId: number | null;
 }

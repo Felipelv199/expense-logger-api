@@ -39,12 +39,18 @@ export async function create(
 
     validateCreateTransactionRequest(body);
 
-    if (body.categoryId) {
-      const category = await findById(body.categoryId);
+    const { categoryId, date } = body;
+
+    if (categoryId) {
+      const category = await findById(categoryId);
 
       if (!category) {
         throw new Error(ErrorMessage.CATEGORY_NOT_FOUND);
       }
+    }
+
+    if (date) {
+      body.date = new Date(date);
     }
 
     await insert(Object.values(body));

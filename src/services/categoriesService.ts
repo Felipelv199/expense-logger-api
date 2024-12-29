@@ -10,7 +10,7 @@ import {
 import { validateCreateCategoryRequest } from "./validators/categoriesValidator";
 import { findByName, insert, selectAll } from "../database/queries/categoriesQueries";
 import { findByBudgetId } from "../database/queries/budgetQueries";
-import { mapCategoryRowToCategory, mapCreateCategoryToCategoryRow } from "../mappers/categoriesMapper";
+import { mapCategoryRowToCategory, mapCreateCategoryRequestToCategory, mapCreateCategoryToCategoryRow } from "../mappers/categoriesMapper";
 
 export async function create(
   req: Request<object, object, CreateCategoryRequest>,
@@ -35,9 +35,9 @@ export async function create(
       if (category) throw new Error(ErrorMessage.CATEGORY_ALREADY_EXISTS);
     }
 
-    await insert(mapCreateCategoryToCategoryRow(body));
+    const id = await insert(mapCreateCategoryToCategoryRow(body));
 
-    res.status(201).send();
+    res.send(mapCreateCategoryRequestToCategory(body, id));
   } catch (error: unknown) {
     next(handleError(error));
   }

@@ -5,8 +5,10 @@ import { TransactionRow } from "../types";
 const pool = createPool();
 
 export async function insert(transactionValues: unknown[]) {
+  console.log(transactionValues);
+  console.log(transactionValues.map((v) => console.log(typeof v)));
   await pool.query(
-    "INSERT INTO transactions (Amount, Date, Description, Name) VALUES (?, ?, ?);",
+    "INSERT INTO transactions (Amount, Date, Description, Name) VALUES (?, ?, ?, ?);",
     transactionValues
   );
 }

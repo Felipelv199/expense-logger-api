@@ -1,4 +1,4 @@
-import { RowDataPacket } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { createPool } from "..";
 import { CategoryRow } from "../types";
 
@@ -22,17 +22,19 @@ export async function findByName(
   return rows[0];
 }
 
-export async function insert(categoryRow: CategoryRow) {
+export async function insert(categoryRow: CategoryRow): Promise<number | undefined> {
   if (!categoryRow.budgetId) {
-    await pool.query("INSERT INTO categories (Amount, Name) VALUES (?, ?);", [
+    const [result] = await pool.query("INSERT INTO categories (Amount, Name) VALUES (?, ?);", [
       categoryRow.amount,
       categoryRow.name,
     ]);
+    return (result as ResultSetHeader).insertId;
   } else {
-    await pool.query(
+    const [result] = await pool.query(
       "INSERT INTO categories (Amount, BudgetId, Name) VALUES (?, ?, ?);",
       [categoryRow.amount, categoryRow.budgetId, categoryRow.name]
     );
+    return (result as ResultSetHeader).insertId;
   }
 }
 

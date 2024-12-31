@@ -7,7 +7,7 @@ export interface AccountRow {
   updatedAt: Date | null;
 }
 
-export interface CategoryRow {
+export interface CategoryRow extends RowDataPacket {
   categoryId?: number | null;
   budgetId: number | null;
   name: string;

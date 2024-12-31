@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { create, getAll } from "../services/bankAccountsService";
 
 const router = Router();

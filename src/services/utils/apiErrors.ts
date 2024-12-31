@@ -1,7 +1,7 @@
 import { RequiredFieldNotDefined } from "../types/errors";
 
 export function getRequiredFieldNotDefinedError(
-  fieldName: string
+  fieldName: string,
 ): RequiredFieldNotDefined {
   return {
     fieldName,

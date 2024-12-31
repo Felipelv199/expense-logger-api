@@ -1,32 +1,35 @@
-import { RowDataPacket } from "mysql2";
 import { createPool } from "..";
 import { TransactionRow } from "../types";
 
 const pool = createPool();
 
-export async function insert(transactionValues: unknown[]) {
-  await pool.query(
-    "INSERT INTO transactions (Amount, Date, Description, Name) VALUES (?, ?, ?);",
-    transactionValues
-  );
+export async function insert(transactionRow: TransactionRow) {
+  if (transactionRow.CategoryId)
+    await pool.query(
+      "INSERT INTO transactions (Amount, Date, Description, Name, CategoryId) VALUES (?, ?, ?, ?, ?);",
+      [
+        transactionRow.Amount,
+        transactionRow.Date,
+        transactionRow.Description,
+        transactionRow.Name,
+        transactionRow.CategoryId,
+      ],
+    );
+  else
+    await pool.query(
+      "INSERT INTO transactions (Amount, Date, Description, Name) VALUES (?, ?, ?, ?);",
+      [
+        transactionRow.Amount,
+        transactionRow.Date,
+        transactionRow.Description,
+        transactionRow.Name,
+      ],
+    );
 }
 
 export async function selectAll(): Promise<TransactionRow[]> {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    "SELECT * FROM transactions;"
+  const [rows] = await pool.query<TransactionRow[]>(
+    "SELECT t.*, c.Name AS CategoryName FROM transactions t LEFT JOIN categories c ON t.CategoryId = c.CategoryId ORDER BY t.CreatedAt DESC;",
   );
-  return rows.map((r) => {
-    const rowValues = Object.values(r);
-    return {
-      transactionId: rowValues[0],
-      name: rowValues[1],
-      date: rowValues[2],
-      amount: rowValues[3],
-      accountId: rowValues[4],
-      description: rowValues[5],
-      transactionTypeId: rowValues[6],
-      createdAt: rowValues[7],
-      updatedAt: rowValues[8],
-    };
-  });
+  return rows;
 }

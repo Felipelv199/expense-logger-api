@@ -1,7 +1,4 @@
-import {
-  ApplicationConfiguration,
-  DatabaseConfiguration,
-} from "./types";
+import { ApplicationConfiguration, DatabaseConfiguration } from "./types";
 
 function buildApplicationConfiguration(): ApplicationConfiguration {
   return {

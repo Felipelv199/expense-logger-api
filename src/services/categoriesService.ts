@@ -1,4 +1,17 @@
 import { NextFunction, Request, Response } from "express";
+
+import { findByBudgetId } from "../database/queries/budgetQueries";
+import {
+  findByName,
+  insert,
+  selectAll,
+} from "../database/queries/categoriesQueries";
+import {
+  mapCategoryRowToCategory,
+  mapCreateCategoryRequestToCategory,
+  mapCreateCategoryToCategoryRow,
+} from "../mappers/categoriesMapper";
+
 import {
   ApiError,
   Category,
@@ -8,19 +21,15 @@ import {
   ErrorStatusName,
 } from "./types";
 import { validateCreateCategoryRequest } from "./validators/categoriesValidator";
-import { insert, selectAll } from "../database/queries/categoriesQueries";
-import { findByBudgetId } from "../database/queries/budgetQueries";
 
 export async function create(
   req: Request<object, object, CreateCategoryRequest>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const body = req.body;
-
     validateCreateCategoryRequest(body);
-
     const budgetId = body.budgetId;
     const result = budgetId ? await findByBudgetId(budgetId) : [[], []];
     const [rows] = result;
@@ -28,9 +37,15 @@ export async function create(
     if (budgetId && rows.length === 0)
       throw new Error(ErrorMessage.BUDGET_NOT_FOUND);
 
-    await insert(Object.values(body));
+    if (body.name) {
+      const category = await findByName(body.name);
 
-    res.status(201).send();
+      if (category) throw new Error(ErrorMessage.CATEGORY_ALREADY_EXISTS);
+    }
+
+    const id = await insert(mapCreateCategoryToCategoryRow(body));
+
+    res.send(mapCreateCategoryRequestToCategory(body, id));
   } catch (error: unknown) {
     next(handleError(error));
   }
@@ -39,32 +54,37 @@ export async function create(
 export async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
     const rows = await selectAll();
-    const category = rows.map<Category>((tr) => ({
-      amount: tr.amount,
-      name: tr.name,
-      id: tr.categoryId,
-    }));
+    const categories = rows.map<Category>(mapCategoryRowToCategory);
 
-    res.send(category);
+    res.send(categories);
   } catch (error: unknown) {
     next(handleError(error));
   }
 }
 
 function handleError(err: unknown): ApiError {
-  const error = err instanceof Error ? err : new Error("Unexpected error occured.");
+  const error =
+    err instanceof Error ? err : new Error("Unexpected error occured.");
 
   if (error.message === ErrorMessage.BUDGET_NOT_FOUND) {
     return {
-      status: ErrorStatusCode.NOT_ACCEPTABLE,
       code: ErrorStatusName.NOT_ACCEPTABLE,
       message: error.message,
+      status: ErrorStatusCode.NOT_ACCEPTABLE,
+    };
+  }
+
+  if (error.message === ErrorMessage.CATEGORY_ALREADY_EXISTS) {
+    return {
+      code: ErrorStatusName.CONFLICT,
+      message: error.message,
+      status: ErrorStatusCode.CONFLICT,
     };
   }
 
   return {
-    status: ErrorStatusCode.GENERAL_ERROR,
     code: ErrorStatusName.GENERAL_ERROR,
     message: error.message,
+    status: ErrorStatusCode.GENERAL_ERROR,
   };
 }

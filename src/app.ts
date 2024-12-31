@@ -1,10 +1,10 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 
+import { errorHandler } from "./middlewares/errorHandlerMiddleware";
+import bankAccountsRouter from "./routers/bankAccountsRouter";
 import categoriesRouter from "./routers/categoriesRouter";
 import transactionRouter from "./routers/transactionsRouter";
-import bankAccountsRouter from "./routers/bankAccountsRouter";
-import { errorHandler } from "./middlewares/errorHandlerMiddleware";
 
 export default function buildApp() {
   const app = express();

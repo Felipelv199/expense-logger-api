@@ -44,8 +44,8 @@ function handleError(err: unknown): ApiError {
   const error = err instanceof Error ? err : new Error("Unexpected error occured.");
 
   return {
-    status: ErrorStatusCode.GENERAL_ERROR,
     code: ErrorStatusName.GENERAL_ERROR,
     message: error.message,
+    status: ErrorStatusCode.GENERAL_ERROR,
   };
 }

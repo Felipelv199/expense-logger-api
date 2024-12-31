@@ -10,19 +10,12 @@ import {
 } from "./types";
 import { validateCreateTransactionRequest } from "./validators/transactionsValidator";
 import { findById } from "../database/queries/categoriesQueries";
+import { mapCreateTransactionRequestToTransactionRow, mapTransactionRowToTransaction } from "../mappers/transactionMapper";
 
 export async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
     const transactionsRows = await selectAll();
-    const transactions = transactionsRows.map<Transaction>((tr) => ({
-      amount: tr.amount,
-      date: tr.date,
-      description: tr.description,
-      id: tr.transactionId,
-      name: tr.name,
-      categoryId: tr.categoryId ?? undefined,
-    }));
-
+    const transactions = transactionsRows.map<Transaction>((row) => (mapTransactionRowToTransaction(row)));
     res.send(transactions);
   } catch (error: unknown) {
     next(handleError(error));
@@ -36,10 +29,8 @@ export async function create(
 ) {
   try {
     const body = request.body;
-
     validateCreateTransactionRequest(body);
-
-    const { categoryId, date } = body;
+    const { categoryId } = body;
 
     if (categoryId) {
       const category = await findById(categoryId);
@@ -49,12 +40,8 @@ export async function create(
       }
     }
 
-    if (date) {
-      body.date = new Date(date);
-    }
-
-    await insert(Object.values(body));
-
+    const row = mapCreateTransactionRequestToTransactionRow(body);
+    await insert(row);
     res.status(201).send();
   } catch (error: unknown) {
     next(handleError(error));
@@ -67,15 +54,15 @@ function handleError(err: unknown): ApiError {
 
   if (error.message === ErrorMessage.CATEGORY_NOT_FOUND) {
     return {
-      status: ErrorStatusCode.NOT_ACCEPTABLE,
       code: ErrorStatusName.NOT_ACCEPTABLE,
       message: error.message,
+      status: ErrorStatusCode.NOT_ACCEPTABLE,
     };
   }
 
   return {
-    status: ErrorStatusCode.GENERAL_ERROR,
     code: ErrorStatusName.GENERAL_ERROR,
     message: error.message,
+    status: ErrorStatusCode.GENERAL_ERROR,
   };
 }

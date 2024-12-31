@@ -59,23 +59,23 @@ function handleError(err: unknown): ApiError {
 
   if (error.message === ErrorMessage.BUDGET_NOT_FOUND) {
     return {
-      status: ErrorStatusCode.NOT_ACCEPTABLE,
       code: ErrorStatusName.NOT_ACCEPTABLE,
       message: error.message,
+      status: ErrorStatusCode.NOT_ACCEPTABLE,
     };
   }
 
   if (error.message === ErrorMessage.CATEGORY_ALREADY_EXISTS) {
     return {
-      status: ErrorStatusCode.CONFLICT,
       code: ErrorStatusName.CONFLICT,
       message: error.message,
+      status: ErrorStatusCode.CONFLICT,
     };
   }
 
   return {
-    status: ErrorStatusCode.GENERAL_ERROR,
     code: ErrorStatusName.GENERAL_ERROR,
     message: error.message,
+    status: ErrorStatusCode.GENERAL_ERROR,
   };
 }

@@ -1,18 +1,18 @@
 export interface CreateTransactionRequest {
   amount: number;
   name: string;
-  description: string;
-  date: Date;
+  description?: string;
+  date: string;
   categoryId?: number;
 }
 
 export interface Transaction {
   amount: number;
   name: string;
-  description: string;
+  description?: string;
   date: Date;
-  id: number;
-  categoryId?: number;
+  id?: number;
+  category?: Category;
 }
 
 export enum ErrorMessage {

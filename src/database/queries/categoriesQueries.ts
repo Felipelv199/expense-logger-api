@@ -43,10 +43,10 @@ export async function selectAll(): Promise<CategoryRow[]> {
   return rows.map((r) => {
     const rowValues = Object.values(r);
     return {
-      categoryId: rowValues[0],
-      budgetId: rowValues[1],
-      name: rowValues[2],
       amount: rowValues[3],
+      budgetId: rowValues[1],
+      categoryId: rowValues[0],
+      name: rowValues[2],
     };
   });
 }

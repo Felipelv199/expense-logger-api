@@ -29,7 +29,7 @@ export async function insert(transactionRow: TransactionRow) {
 
 export async function selectAll(): Promise<TransactionRow[]> {
   const [rows] = await pool.query<TransactionRow[]>(
-    "select t.*, c.Name as CategoryName from transactions t left join categories c on t.CategoryId = c.CategoryId order by t.CreatedAt desc;"
+    "SELECT t.*, c.Name AS CategoryName FROM transactions t LEFT JOIN categories c ON t.CategoryId = c.CategoryId ORDER BY t.CreatedAt DESC;"
   );
   return rows;
 }

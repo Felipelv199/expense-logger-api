@@ -5,10 +5,10 @@ export function mapCreateTransactionRequestToTransactionRow(
   createTransactionRequest: CreateTransactionRequest
 ): TransactionRow {
   return {
-    Amount: createTransactionRequest.amount,
     AccountId: null,
-    CreatedAt: null,
+    Amount: createTransactionRequest.amount,
     CategoryId: createTransactionRequest.categoryId ?? null,
+    CreatedAt: null,
     Date: new Date(createTransactionRequest.date),
     Description: createTransactionRequest.description,
     Name: createTransactionRequest.name,
@@ -22,16 +22,16 @@ export function mapTransactionRowToTransaction(
 ): Transaction {
   return {
     amount: transactionRow.Amount,
+    category:
+      transactionRow.CategoryName && transactionRow.CategoryId
+        ? {
+            id: transactionRow.CategoryId,
+            name: transactionRow.CategoryName,
+          }
+        : undefined,
     date: transactionRow.Date,
     description: transactionRow.Description ?? undefined,
     id: transactionRow.TransactionId,
     name: transactionRow.Name,
-    category:
-      transactionRow.CategoryName && transactionRow.CategoryId
-        ? {
-            name: transactionRow.CategoryName,
-            id: transactionRow.CategoryId,
-          }
-        : undefined,
   };
 }

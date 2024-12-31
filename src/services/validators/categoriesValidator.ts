@@ -1,7 +1,7 @@
 import { CreateCategoryRequest } from "../types";
 
 export function validateCreateCategoryRequest(
-  createCategoryRequest: CreateCategoryRequest
+  createCategoryRequest: CreateCategoryRequest,
 ) {
   const { name } = createCategoryRequest;
 

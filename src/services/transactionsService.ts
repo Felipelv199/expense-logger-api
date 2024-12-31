@@ -1,5 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+
+import { findById } from "../database/queries/categoriesQueries";
 import { insert, selectAll } from "../database/queries/transactionQueries";
+import {
+  mapCreateTransactionRequestToTransactionRow,
+  mapTransactionRowToTransaction,
+} from "../mappers/transactionMapper";
+
 import {
   ApiError,
   CreateTransactionRequest,
@@ -9,23 +16,11 @@ import {
   Transaction,
 } from "./types";
 import { validateCreateTransactionRequest } from "./validators/transactionsValidator";
-import { findById } from "../database/queries/categoriesQueries";
-import { mapCreateTransactionRequestToTransactionRow, mapTransactionRowToTransaction } from "../mappers/transactionMapper";
-
-export async function getAll(_: Request, res: Response, next: NextFunction) {
-  try {
-    const transactionsRows = await selectAll();
-    const transactions = transactionsRows.map<Transaction>((row) => (mapTransactionRowToTransaction(row)));
-    res.send(transactions);
-  } catch (error: unknown) {
-    next(handleError(error));
-  }
-}
 
 export async function create(
   request: Request<object, object, CreateTransactionRequest>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const body = request.body;
@@ -42,7 +37,21 @@ export async function create(
 
     const row = mapCreateTransactionRequestToTransactionRow(body);
     await insert(row);
+
     res.status(201).send();
+  } catch (error: unknown) {
+    next(handleError(error));
+  }
+}
+
+export async function getAll(_: Request, res: Response, next: NextFunction) {
+  try {
+    const transactionsRows = await selectAll();
+    const transactions = transactionsRows.map<Transaction>(
+      mapTransactionRowToTransaction,
+    );
+
+    res.send(transactions);
   } catch (error: unknown) {
     next(handleError(error));
   }

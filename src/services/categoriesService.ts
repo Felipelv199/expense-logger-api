@@ -1,4 +1,17 @@
 import { NextFunction, Request, Response } from "express";
+
+import { findByBudgetId } from "../database/queries/budgetQueries";
+import {
+  findByName,
+  insert,
+  selectAll,
+} from "../database/queries/categoriesQueries";
+import {
+  mapCategoryRowToCategory,
+  mapCreateCategoryRequestToCategory,
+  mapCreateCategoryToCategoryRow,
+} from "../mappers/categoriesMapper";
+
 import {
   ApiError,
   Category,
@@ -8,20 +21,15 @@ import {
   ErrorStatusName,
 } from "./types";
 import { validateCreateCategoryRequest } from "./validators/categoriesValidator";
-import { findByName, insert, selectAll } from "../database/queries/categoriesQueries";
-import { findByBudgetId } from "../database/queries/budgetQueries";
-import { mapCategoryRowToCategory, mapCreateCategoryRequestToCategory, mapCreateCategoryToCategoryRow } from "../mappers/categoriesMapper";
 
 export async function create(
   req: Request<object, object, CreateCategoryRequest>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const body = req.body;
-
     validateCreateCategoryRequest(body);
-
     const budgetId = body.budgetId;
     const result = budgetId ? await findByBudgetId(budgetId) : [[], []];
     const [rows] = result;
@@ -46,7 +54,8 @@ export async function create(
 export async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
     const rows = await selectAll();
-    const categories = rows.map<Category>((row) => mapCategoryRowToCategory(row));
+    const categories = rows.map<Category>(mapCategoryRowToCategory);
+
     res.send(categories);
   } catch (error: unknown) {
     next(handleError(error));

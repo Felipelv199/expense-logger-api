@@ -1,7 +1,7 @@
 import { CreateTransactionRequest } from "../types";
 
 export function validateCreateTransactionRequest(
-  createTransactionRequest: CreateTransactionRequest
+  createTransactionRequest: CreateTransactionRequest,
 ) {
   const { amount, date, name } = createTransactionRequest;
 

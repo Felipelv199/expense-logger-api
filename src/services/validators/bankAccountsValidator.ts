@@ -1,7 +1,7 @@
 import { CreateBankAccountRequest } from "../types";
 
 export function validateCreateBankAccount(
-  createAccountRequest: CreateBankAccountRequest
+  createAccountRequest: CreateBankAccountRequest,
 ) {
   const { name } = createAccountRequest;
 

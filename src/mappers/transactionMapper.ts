@@ -2,7 +2,7 @@ import { TransactionRow } from "../database/types";
 import { CreateTransactionRequest, Transaction } from "../services/types";
 
 export function mapCreateTransactionRequestToTransactionRow(
-  createTransactionRequest: CreateTransactionRequest
+  createTransactionRequest: CreateTransactionRequest,
 ): TransactionRow {
   return {
     AccountId: null,
@@ -18,7 +18,7 @@ export function mapCreateTransactionRequestToTransactionRow(
 }
 
 export function mapTransactionRowToTransaction(
-  transactionRow: TransactionRow
+  transactionRow: TransactionRow,
 ): Transaction {
   return {
     amount: transactionRow.Amount,

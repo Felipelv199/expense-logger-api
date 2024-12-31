@@ -1,11 +1,10 @@
 import mysql, { PoolOptions } from "mysql2/promise";
+
+import { buildDatabaseConfiguration } from "../configurations";
 import { DatabaseConfiguration } from "../configurations/types";
-import {
-  buildDatabaseConfiguration,
-} from "../configurations";
 
 function _buildPoolOptions(
-  dabaseConfiguration: DatabaseConfiguration
+  dabaseConfiguration: DatabaseConfiguration,
 ): PoolOptions {
   return {
     database: dabaseConfiguration.database,

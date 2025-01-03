@@ -5,18 +5,18 @@ export function mapCreateCategoryToCategoryRow(
   createCategoryRequest: CreateCategoryRequest,
 ): CategoryRow {
   return {
-    amount: createCategoryRequest.amount ?? null,
-    budgetId: createCategoryRequest.budgetId ?? null,
-    name: createCategoryRequest.name,
+    Amount: createCategoryRequest.amount ?? null,
+    BudgetId: createCategoryRequest.budgetId ?? null,
+    Name: createCategoryRequest.name,
   } as CategoryRow;
 }
 
 export function mapCategoryRowToCategory(categoryRow: CategoryRow): Category {
   return {
-    amount: categoryRow.amount ?? undefined,
-    budgetId: categoryRow.budgetId ?? undefined,
-    id: categoryRow.categoryId ?? undefined,
-    name: categoryRow.name,
+    amount: categoryRow.Amount ?? undefined,
+    budgetId: categoryRow.BudgetId ?? undefined,
+    id: categoryRow.CategoryId ?? undefined,
+    name: categoryRow.Name,
   };
 }
 

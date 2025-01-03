@@ -8,10 +8,10 @@ export interface AccountRow extends RowDataPacket {
 }
 
 export interface CategoryRow extends RowDataPacket {
-  categoryId?: number | null;
-  budgetId: number | null;
-  name: string;
-  amount: string | null;
+  CategoryId?: number | null;
+  BudgetId: number | null;
+  Name: string;
+  Amount: string | null;
 }
 
 export interface TransactionRow extends RowDataPacket {

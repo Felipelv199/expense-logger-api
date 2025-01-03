@@ -26,16 +26,16 @@ export async function findByName(
 export async function insert(
   categoryRow: CategoryRow,
 ): Promise<number | undefined> {
-  if (!categoryRow.budgetId) {
+  if (!categoryRow.BudgetId) {
     const [result] = await pool.query(
       "INSERT INTO categories (Amount, Name) VALUES (?, ?);",
-      [categoryRow.amount, categoryRow.name],
+      [categoryRow.Amount, categoryRow.Name],
     );
     return (result as ResultSetHeader).insertId;
   } else {
     const [result] = await pool.query(
       "INSERT INTO categories (Amount, BudgetId, Name) VALUES (?, ?, ?);",
-      [categoryRow.amount, categoryRow.budgetId, categoryRow.name],
+      [categoryRow.Amount, categoryRow.BudgetId, categoryRow.Name],
     );
     return (result as ResultSetHeader).insertId;
   }

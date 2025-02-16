@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2";
-
+import { PageSize } from "../../services/types";
 export interface AccountRow extends RowDataPacket {
   accountId: number;
   accountName: string;
@@ -8,10 +8,10 @@ export interface AccountRow extends RowDataPacket {
 }
 
 export interface CategoryRow extends RowDataPacket {
-  categoryId?: number | null;
-  budgetId: number | null;
-  name: string;
-  amount: string | null;
+  CategoryId?: number | null;
+  BudgetId: number | null;
+  Name: string;
+  Amount: string | null;
 }
 
 export interface TransactionRow extends RowDataPacket {
@@ -26,4 +26,13 @@ export interface TransactionRow extends RowDataPacket {
   TransactionId?: number;
   TransactionTypeId: number | null;
   UpdatedAt: Date | null;
+}
+
+export interface CountRow extends RowDataPacket {
+  Count: number;
+}
+
+export interface PaginationClause {
+  offset: number;
+  limit: PageSize;
 }

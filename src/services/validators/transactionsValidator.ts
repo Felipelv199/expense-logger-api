@@ -1,19 +1,31 @@
-import { CreateTransactionRequest } from "../types";
+import { CreateTransactionBody, ErrorMessage } from "../types";
 
 export function validateCreateTransactionRequest(
-  createTransactionRequest: CreateTransactionRequest,
+  createTransactionRequest: CreateTransactionBody,
 ) {
   const { amount, date, name } = createTransactionRequest;
 
-  if (!amount) {
-    throw new Error(`Missing required fields with name 'amount'.`);
+  if (amount === undefined) {
+    throw new Error(
+      `${ErrorMessage.INVALID_TRANSACTION}: Missing required field 'amount'.`,
+    );
   }
 
-  if (!date) {
-    throw new Error(`Missing required fields with name 'date'.`);
+  if (date === undefined) {
+    throw new Error(
+      `${ErrorMessage.INVALID_TRANSACTION}: Missing required field 'date'.`,
+    );
   }
 
-  if (!name) {
-    throw new Error(`Missing required fields with name 'name'.`);
+  if (name === undefined) {
+    throw new Error(
+      `${ErrorMessage.INVALID_TRANSACTION}: Missing required field 'name'.`,
+    );
   }
+}
+
+export function validateBulkCreateTransactionRequest(
+  bulkCreateTransactionRequest: CreateTransactionBody[],
+) {
+  bulkCreateTransactionRequest.forEach(validateCreateTransactionRequest);
 }

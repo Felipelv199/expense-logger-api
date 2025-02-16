@@ -1,8 +1,8 @@
 import { TransactionRow } from "../database/types";
-import { CreateTransactionRequest, Transaction } from "../services/types";
+import { CreateTransactionBody, Transaction } from "../services/types";
 
 export function mapCreateTransactionRequestToTransactionRow(
-  createTransactionRequest: CreateTransactionRequest,
+  createTransactionRequest: CreateTransactionBody,
 ): TransactionRow {
   return {
     AccountId: null,
